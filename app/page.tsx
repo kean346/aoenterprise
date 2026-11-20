@@ -1,9 +1,10 @@
 import Image from "next/image";
 import { ArrowDown, ArrowUpRight, MapPin } from "lucide-react";
-import { ApproachDiagram } from "../components/approach-diagram";
+import { GlassFeature } from "../components/glass-feature";
 import { PaperHero } from "../components/paper-hero";
 import { QuoteForm } from "../components/quote-form";
 import { SectionMotion } from "../components/section-motion";
+import { ScrollFilm } from "../components/scroll-film";
 import { ServiceLinks } from "../components/service-links";
 import { services } from "../components/services";
 import { SiteHeader } from "../components/site-header";
@@ -29,16 +30,19 @@ export default function Home() {
         <section id="top" className="hero" aria-labelledby="hero-heading" tabIndex={-1}>
           <div className="shell hero-inner">
             <div className="hero-copy">
-              <p className="eyebrow with-rule hero-enter">Procurement / Print / Supply</p>
+              <p className="eyebrow hero-enter">Procurement · Print · Supply</p>
               <h1 id="hero-heading" className="hero-enter">
                 <span>Reliable supply.</span>
-                <em>Thoughtfully<br /> delivered.</em>
+                <span>Thoughtfully delivered.</span>
               </h1>
               <p className="hero-summary hero-enter">Bulk stationery, commercial printing and dependable procurement partnerships for South African organisations.</p>
               <div className="hero-actions hero-enter">
                 <a className="button button-dark" href="#rfq">Request a Quote <ArrowUpRight size={16} aria-hidden="true" /></a>
                 <a className="text-link" href="#services">Explore our services <ArrowDown size={15} aria-hidden="true" /></a>
               </div>
+              <nav className="hero-nav" aria-label="Explore AO Enterprises">
+                {footerNav.slice(1).map(([label, href]) => <a key={href} href={href}>{label}</a>)}
+              </nav>
             </div>
             <PaperHero />
           </div>
@@ -50,34 +54,41 @@ export default function Home() {
           </ul>
         </div>
 
+        <ScrollFilm />
+
         <section id="services" className="services-section section-pad" aria-labelledby="services-heading" tabIndex={-1}>
           <div className="shell">
-            <div className="section-heading services-intro">
-              <div>
-                <p className="eyebrow with-rule">What we specialise in</p>
-                <h2 id="services-heading">Three disciplines.<br /><em>One dependable partner.</em></h2>
+            <div className="services-panel">
+              <div className="section-heading services-intro">
+                <div>
+                  <p className="eyebrow">What we specialise in</p>
+                  <h2 id="services-heading">Three disciplines.<br />One dependable partner.</h2>
+                </div>
+                <div className="services-aside">
+                  <p className="section-summary">From one bulk order to an ongoing supply arrangement, AO helps you source what your organisation needs.</p>
+                  <a href="#rfq" className="button button-outline">Request a Quote <ArrowUpRight size={15} aria-hidden="true" /></a>
+                </div>
               </div>
-              <p className="section-summary">From one bulk order to an ongoing supply arrangement, AO helps you source what your organisation needs.</p>
-            </div>
-            <div className="service-grid">
-              {services.map((service, index) => (
-                <article key={service.id} className="service-card" data-reveal>
-                  <a href="#rfq" data-service={service.id} aria-labelledby={"service-title-" + service.id + " service-action-" + service.id}>
-                    <div className={"service-image service-image-" + service.id}>
-                      <Image src={"/assets/services/" + service.id + "-demo.webp"} alt={service.imageAlt} width={service.imageWidth} height={284} sizes="(max-width: 700px) 95vw, (max-width: 1440px) 31vw, 420px" />
-                    </div>
-                    <div className="service-body">
-                      <div className="service-meta">
-                        <span className="eyebrow" aria-hidden="true">0{index + 1}</span>
-                        <Image className="service-icon" src={"/assets/services/" + service.id + "-line-icon.svg"} alt="" width={31} height={31} />
+              <div className="service-grid">
+                {services.map((service, index) => (
+                  <article key={service.id} className="service-card" data-reveal>
+                    <a href="#rfq" data-service={service.id} aria-labelledby={"service-title-" + service.id + " service-action-" + service.id}>
+                      <div className="service-body">
+                        <div className="service-meta"><span className="eyebrow" aria-hidden="true">0{index + 1}</span></div>
+                        <div className="service-art">
+                          <Image className="service-icon" src={"/assets/services/" + service.id + "-line-icon.svg"} alt="" width={72} height={72} />
+                          <div className={"service-image service-image-" + service.id}>
+                            <Image src={"/assets/services/" + service.id + "-demo.webp"} alt={service.imageAlt} width={service.imageWidth} height={284} sizes="(max-width: 700px) 80vw, 29vw" />
+                          </div>
+                        </div>
+                        <h3 id={"service-title-" + service.id}>{service.name}</h3>
+                        <p>{service.copy}</p>
+                        <span className="service-action" id={"service-action-" + service.id}>Enquire <ArrowUpRight size={16} aria-hidden="true" /></span>
                       </div>
-                      <h3 id={"service-title-" + service.id}>{service.name}</h3>
-                      <p>{service.copy}</p>
-                      <span className="service-action" id={"service-action-" + service.id}>Enquire <ArrowUpRight size={16} aria-hidden="true" /></span>
-                    </div>
-                  </a>
-                </article>
-              ))}
+                    </a>
+                  </article>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -86,20 +97,23 @@ export default function Home() {
           <div className="shell approach-inner">
             <div className="section-heading">
               <p className="eyebrow with-rule">About AO</p>
-              <h2 id="about-heading">Procurement should feel <em>straightforward.</em></h2>
+              <h2 id="about-heading">Procurement should feel straightforward.</h2>
+            </div>
+            <div>
               <p className="section-summary">Based in Pretoria, AO Enterprises helps organisations source stationery, arrange commercial printing and plan recurring orders. We start with your specifications, quantities and purchasing cycle, then quote for what you need.</p>
               <a href="#process" className="text-link">See how we work <ArrowDown size={15} aria-hidden="true" /></a>
             </div>
-            <ApproachDiagram />
           </div>
         </section>
+
+        <GlassFeature />
 
         <section id="process" className="process-section section-pad" aria-labelledby="process-heading" tabIndex={-1}>
           <div className="shell">
             <div className="section-heading process-intro">
               <div>
                 <p className="eyebrow with-rule">Our process</p>
-                <h2 id="process-heading">From enquiry<br /><em>to fulfilment.</em></h2>
+                <h2 id="process-heading">From enquiry<br />to fulfilment.</h2>
               </div>
               <p className="section-summary">It starts with a brief. We work through the details with you before you confirm an order.</p>
             </div>
@@ -131,7 +145,7 @@ export default function Home() {
           <div className="shell contact-inner">
             <div className="section-heading">
               <p className="eyebrow with-rule">Contact</p>
-              <h2 id="contact-heading">Tell us what you<br /> <em>need to source.</em></h2>
+              <h2 id="contact-heading">Tell us what you<br /> need to source.</h2>
               <p className="section-summary">Share your quantities, print specifications or recurring supply needs to prepare a quote request.</p>
               <a href="#rfq" className="text-link">Go to quote form <ArrowDown size={15} aria-hidden="true" /></a>
               <p className="contact-location"><MapPin size={16} aria-hidden="true" /> Pretoria, Gauteng, South Africa</p>

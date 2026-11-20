@@ -4,6 +4,7 @@ import "@fontsource-variable/dm-sans";
 import "@fontsource/instrument-serif/latin-400.css";
 import "@fontsource/instrument-serif/latin-400-italic.css";
 import "./globals.css";
+import "./facet.css";
 
 const description = "AO Enterprises supplies bulk stationery, commercial printing and long-term procurement support from Pretoria, Gauteng.";
 

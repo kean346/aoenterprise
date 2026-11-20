@@ -16,7 +16,9 @@ npm run build
 
 Open the URL printed by Next.js for development. The production build writes a static site to `out/`. Serve that directory with a static web server.
 
-The paper animation is built in `components/paper-scene.ts`. It advances the ribbon centreline in fixed-length steps, and uses two lit paper surfaces and locally generated paper grain. The homepage uses the supplied still for reduced-motion, data-saving and WebGL fallback. The About section's isometric diagram is original homepage artwork.
+The hero uses an original AO ribbon image on a WebGL mesh. The bend is projected from fixed-length steps to retain the paper texture as the ribbon unfurls and returns. The isometric sequence animates the supplied four-object composition and seeks through the video as the visitor scrolls. Reduced-motion and data-saving visitors get the poster. The standalone Facet study uses cursor-controlled glass shards and an accessible definitions view with an HTML fallback.
+
+Vercel builds the homepage with `npm run build` and serves the static export from `out/`. The video uses HTTP byte ranges for responsive seeking.
 
 ## Demo content
 

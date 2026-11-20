@@ -5,6 +5,8 @@ import { Pause, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { createPaperScene } from "./paper-scene";
 
+const source = "/assets/hero/ao-paper-study.webp";
+
 export function PaperHero() {
   const stage = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -27,7 +29,7 @@ export function PaperHero() {
     const mobile = window.matchMedia("(max-width: 700px)");
     const device = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } };
 
-    let scene: ReturnType<typeof createPaperScene> | undefined;
+    let scene: Awaited<ReturnType<typeof createPaperScene>> | undefined;
     let visible = false;
     let elapsed = 0;
     let last = 0;
@@ -48,7 +50,7 @@ export function PaperHero() {
       if (last && step < (mobile.matches ? 31 : 15)) return;
       if (last) elapsed += Math.min(step, 70) / 1000;
       last = time;
-      scene.draw(elapsed);
+      container?.style.setProperty("--unfurl", String(scene.draw(elapsed)));
     }
 
     function stop() {
@@ -74,7 +76,7 @@ export function PaperHero() {
     function resize() {
       if (!scene || !container) return;
       scene.resize(container.clientWidth, container.clientHeight);
-      scene.draw(elapsed);
+      container?.style.setProperty("--unfurl", String(scene.draw(elapsed)));
     }
 
     async function update() {
@@ -93,7 +95,12 @@ export function PaperHero() {
         try {
           const { createPaperScene } = await import("./paper-scene");
           if (disposed || version !== generation) return;
-          scene = createPaperScene(surface, sceneError, mobile.matches);
+          const loaded = await createPaperScene(surface, source, sceneError, mobile.matches);
+          if (disposed || version !== generation) {
+            loaded.dispose();
+            return;
+          }
+          scene = loaded;
           resize();
           setReady(true);
         } catch {
@@ -132,10 +139,11 @@ export function PaperHero() {
   return (
     <figure className={ready ? "paper-figure live-paper" : "paper-figure"}>
       <div className="paper-stage" ref={stage} aria-hidden="true">
-        <div className="paper-grid" />
         <div className="paper-shadow" />
-        <Image className="paper-fallback" src="/assets/hero/paper-ribbon-still.webp" alt="" width={1448} height={724} preload sizes="(max-width: 700px) 100vw, 65vw" />
-        <canvas ref={canvas} className="paper-canvas" />
+        <div className="paper-sheet">
+          <Image className="paper-fallback" src={source} alt="" fill preload sizes="(max-width: 700px) 100vw, 76vw" />
+          <canvas ref={canvas} className="paper-canvas" />
+        </div>
       </div>
       <figcaption className="hero-caption">
         <span className="eyebrow">Pretoria, South Africa</span>

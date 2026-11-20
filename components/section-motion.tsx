@@ -9,16 +9,14 @@ export function SectionMotion() {
 
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
-        if (entry.target.hasAttribute("data-ambient")) {
-          entry.target.classList.toggle("in-view", entry.isIntersecting);
-        } else if (entry.isIntersecting) {
+        if (entry.isIntersecting) {
           entry.target.classList.add("has-revealed");
           observer.unobserve(entry.target);
         }
       }
     }, { threshold: 0.2 });
 
-    for (const element of document.querySelectorAll("[data-reveal], [data-ambient]")) observer.observe(element);
+    for (const element of document.querySelectorAll("[data-reveal]")) observer.observe(element);
     return () => observer.disconnect();
   }, []);
 
