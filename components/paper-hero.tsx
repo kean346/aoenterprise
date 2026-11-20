@@ -5,7 +5,7 @@ import { Pause, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { createPaperScene } from "./paper-scene";
 
-const source = "/assets/hero/ao-paper-study.webp";
+const source = "/assets/hero/ao-raspberry-ribbon.webp";
 
 export function PaperHero() {
   const stage = useRef<HTMLDivElement>(null);
@@ -48,7 +48,7 @@ export function PaperHero() {
       frame = requestAnimationFrame(draw);
       const step = time - last;
       if (last && step < (mobile.matches ? 31 : 15)) return;
-      if (last) elapsed += Math.min(step, 70) / 1000;
+      if (last) elapsed += Math.min(step, 250) / 1000;
       last = time;
       container?.style.setProperty("--unfurl", String(scene.draw(elapsed)));
     }
@@ -141,16 +141,14 @@ export function PaperHero() {
       <div className="paper-stage" ref={stage} aria-hidden="true">
         <div className="paper-shadow" />
         <div className="paper-sheet">
-          <Image className="paper-fallback" src={source} alt="" fill preload sizes="(max-width: 700px) 100vw, 76vw" />
+          <Image className="paper-fallback" src={source} alt="" fill preload sizes="(max-width: 930px) 93vw, 61vw" />
           <canvas ref={canvas} className="paper-canvas" />
         </div>
       </div>
-      <figcaption className="hero-caption">
-        <span className="eyebrow">Pretoria, South Africa</span>
-        {ready && <button type="button" className="motion-button" onClick={toggleMotion} aria-label={paused ? "Play paper animation" : "Pause paper animation"}>
-          {paused ? <Play size={13} aria-hidden="true" /> : <Pause size={13} aria-hidden="true" />}
-        </button>}
-      </figcaption>
+      {ready && <button type="button" className="motion-button" onClick={toggleMotion} aria-label={paused ? "Play paper animation" : "Pause paper animation"}>
+        {paused ? <Play size={14} aria-hidden="true" /> : <Pause size={14} aria-hidden="true" />}
+      </button>}
+      <figcaption className="sr-only">An embossed raspberry paper ribbon with a white underside.</figcaption>
     </figure>
   );
 }

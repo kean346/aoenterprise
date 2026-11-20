@@ -17,17 +17,18 @@ export function ScrollFilm() {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
     const device = navigator as Navigator & { connection?: { saveData?: boolean } };
     let inRange = false;
+    let failed = false;
     let frame = 0;
 
     function seek() {
       frame = 0;
-      if (!inRange || !wrapper || !clip || reduce.matches || !Number.isFinite(clip.duration) || clip.seeking) return;
+      if (!inRange || !wrapper || !clip || wrapper.dataset.motion !== "active" || !Number.isFinite(clip.duration) || clip.seeking) return;
       const bounds = wrapper.getBoundingClientRect();
-      const start = Math.min(innerHeight * .72, 590);
       const picture = clip.parentElement;
       const top = picture ? parseFloat(getComputedStyle(picture).top) || 0 : 0;
-      const distance = start + Math.max(0, bounds.height - clip.clientHeight - top);
-      const progress = Math.max(0, Math.min(1, (start - bounds.top) / distance));
+      const lead = Math.min(innerHeight * .30, clip.clientHeight * .42);
+      const travel = Math.max(0, bounds.height - clip.clientHeight);
+      const progress = Math.max(0, Math.min(1, (top + lead - bounds.top) / (lead + travel)));
       const target = progress * (clip.duration - 1 / 24);
       if (Math.abs(clip.currentTime - target) >= 1 / 48) clip.currentTime = target;
       else if (clip.readyState >= 2) clip.dataset.frame = "ready";
@@ -38,16 +39,17 @@ export function ScrollFilm() {
     }
 
     function enable() {
-      if (!clip || reduce.matches || device.connection?.saveData) {
-        if (clip) {
-          delete clip.dataset.frame;
-          if (clip.hasAttribute("src")) {
-            clip.removeAttribute("src");
-            clip.load();
-          }
+      if (!clip || !wrapper) return;
+      if (failed || reduce.matches || device.connection?.saveData || !clip.canPlayType('video/mp4; codecs="avc1.640020"')) {
+        delete wrapper.dataset.motion;
+        delete clip.dataset.frame;
+        if (clip.hasAttribute("src")) {
+          clip.removeAttribute("src");
+          clip.load();
         }
         return;
       }
+      wrapper.dataset.motion = "active";
       if (inRange && !clip.hasAttribute("src")) {
         clip.src = movie;
         clip.preload = "auto";
@@ -59,12 +61,20 @@ export function ScrollFilm() {
       inRange = entry.isIntersecting;
       if (inRange) enable();
     }, { rootMargin: "160px" });
+    function showPoster() {
+      failed = true;
+      if (wrapper) delete wrapper.dataset.motion;
+      if (clip) delete clip.dataset.frame;
+    }
+
     observer.observe(wrapper);
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
     clip.addEventListener("loadeddata", schedule);
     clip.addEventListener("seeked", schedule);
+    clip.addEventListener("error", showPoster);
     reduce.addEventListener("change", enable);
+    enable();
     return () => {
       observer.disconnect();
       cancelAnimationFrame(frame);
@@ -72,7 +82,9 @@ export function ScrollFilm() {
       window.removeEventListener("resize", schedule);
       clip.removeEventListener("loadeddata", schedule);
       clip.removeEventListener("seeked", schedule);
+      clip.removeEventListener("error", showPoster);
       reduce.removeEventListener("change", enable);
+      delete wrapper.dataset.motion;
     };
   }, []);
 

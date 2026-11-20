@@ -1,120 +1,147 @@
 import Image from "next/image";
-import { ArrowDown, ArrowUpRight, MapPin } from "lucide-react";
+import { ArrowDown, ArrowUpRight, UserRound } from "lucide-react";
+import { ContactSection } from "../components/contact-section";
 import { GlassFeature } from "../components/glass-feature";
 import { PaperHero } from "../components/paper-hero";
-import { QuoteForm } from "../components/quote-form";
-import { SectionMotion } from "../components/section-motion";
 import { ScrollFilm } from "../components/scroll-film";
+import { SectionMotion } from "../components/section-motion";
 import { ServiceLinks } from "../components/service-links";
-import { services } from "../components/services";
+import { SiteFooter } from "../components/site-footer";
 import { SiteHeader } from "../components/site-header";
+import { services } from "../components/services";
+
+const pillars = [
+  { title: "Bulk and contract pricing", copy: "Pricing based on order volumes and recurring supply needs." },
+  { title: "Coordinated delivery", copy: "Delivery areas and schedules agreed as part of your quote." },
+  { title: "Procurement documentation", copy: "Requirements for company and tender documents reviewed with your brief." },
+  { title: "Dedicated account contact", copy: "A point of contact for specifications, orders and ongoing supply." },
+];
+
+const directors = [
+  { name: "Alwyn van der Merwe", title: "Chief Executive Officer (CEO)" },
+  { name: "Sibusiso Junior Oratilwe Mkhatshwa", title: "Chief Operating Officer (COO)" },
+  { name: "Kerrigan Adams", title: "Chief Financial Officer (CFO)" },
+];
 
 const process = [
   { title: "Share your requirements", copy: "Tell us what you need, including quantities, specifications and any relevant dates." },
   { title: "Receive a tailored quote", copy: "We review your brief, clarify the details and prepare a quote for your consideration." },
   { title: "Confirm your order", copy: "Review the quote and agree on the scope, terms and delivery arrangements." },
-  { title: "Supply & fulfilment", copy: "Once confirmed, we coordinate supply in line with the agreed arrangements." },
-];
-
-const footerNav = [
-  ["Home", "#top"], ["Services", "#services"], ["Our Process", "#process"],
-  ["About", "#about"], ["Contact", "#contact"],
+  { title: "Supply and fulfilment", copy: "Once confirmed, we coordinate supply in line with the agreed arrangements." },
 ];
 
 export default function Home() {
   return (
     <>
       <a className="skip-link" href="#main-content">Skip to content</a>
-      <SiteHeader />
       <main id="main-content" tabIndex={-1}>
-        <section id="top" className="hero" aria-labelledby="hero-heading" tabIndex={-1}>
-          <div className="shell hero-inner">
-            <div className="hero-copy">
-              <p className="eyebrow hero-enter">Procurement · Print · Supply</p>
-              <h1 id="hero-heading" className="hero-enter">
-                <span>Reliable supply.</span>
-                <span>Thoughtfully delivered.</span>
-              </h1>
-              <p className="hero-summary hero-enter">Bulk stationery, commercial printing and dependable procurement partnerships for South African organisations.</p>
-              <div className="hero-actions hero-enter">
-                <a className="button button-dark" href="#rfq">Request a Quote <ArrowUpRight size={16} aria-hidden="true" /></a>
-                <a className="text-link" href="#services">Explore our services <ArrowDown size={15} aria-hidden="true" /></a>
-              </div>
-              <nav className="hero-nav" aria-label="Explore AO Enterprises">
-                {footerNav.slice(1).map(([label, href]) => <a key={href} href={href}>{label}</a>)}
-              </nav>
-            </div>
-            <PaperHero />
-          </div>
+        <section id="top" className="hero" aria-labelledby="hero-heading">
+          <SiteHeader />
+          <PaperHero />
         </section>
-
-        <div className="scope-strip">
-          <ul className="shell" aria-label="Our areas of supply">
-            {services.map((service) => <li className="eyebrow" key={service.id}>{service.ticker}</li>)}
-          </ul>
-        </div>
 
         <ScrollFilm />
 
         <section id="services" className="services-section section-pad" aria-labelledby="services-heading" tabIndex={-1}>
+          <div className="services-panel">
+            <div className="section-heading services-intro">
+              <h2 id="services-heading">Reliable supply.<br />Thoughtfully delivered.</h2>
+              <div className="services-aside">
+                <p className="section-summary">Bulk stationery, commercial printing and dependable procurement partnerships for South African organisations.</p>
+                <a href="#service-details" className="button button-outline">Explore our services</a>
+              </div>
+            </div>
+            <div className="service-grid">
+              {services.map((service) => (
+                <article key={service.id} className="service-card">
+                  <Image className="service-icon" src={`/assets/services/${service.id}-line-icon.svg`} alt="" width={72} height={72} loading="eager" />
+                  <h3><a href={`#service-${service.id}`}>{service.name}</a></h3>
+                  <p>{service.copy}</p>
+                  <a className="service-action" href="#rfq" data-service={service.id} aria-label={`Enquire about ${service.name}`}>
+                    Enquire <ArrowUpRight size={14} aria-hidden="true" />
+                  </a>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="value-section section-pad" aria-labelledby="value-heading">
           <div className="shell">
-            <div className="services-panel">
-              <div className="section-heading services-intro">
-                <div>
-                  <p className="eyebrow">What we specialise in</p>
-                  <h2 id="services-heading">Three disciplines.<br />One dependable partner.</h2>
-                </div>
-                <div className="services-aside">
-                  <p className="section-summary">From one bulk order to an ongoing supply arrangement, AO helps you source what your organisation needs.</p>
-                  <a href="#rfq" className="button button-outline">Request a Quote <ArrowUpRight size={15} aria-hidden="true" /></a>
-                </div>
-              </div>
-              <div className="service-grid">
-                {services.map((service, index) => (
-                  <article key={service.id} className="service-card" data-reveal>
-                    <a href="#rfq" data-service={service.id} aria-labelledby={"service-title-" + service.id + " service-action-" + service.id}>
-                      <div className="service-body">
-                        <div className="service-meta"><span className="eyebrow" aria-hidden="true">0{index + 1}</span></div>
-                        <div className="service-art">
-                          <Image className="service-icon" src={"/assets/services/" + service.id + "-line-icon.svg"} alt="" width={72} height={72} />
-                          <div className={"service-image service-image-" + service.id}>
-                            <Image src={"/assets/services/" + service.id + "-demo.webp"} alt={service.imageAlt} width={service.imageWidth} height={284} sizes="(max-width: 700px) 80vw, 29vw" />
-                          </div>
-                        </div>
-                        <h3 id={"service-title-" + service.id}>{service.name}</h3>
-                        <p>{service.copy}</p>
-                        <span className="service-action" id={"service-action-" + service.id}>Enquire <ArrowUpRight size={16} aria-hidden="true" /></span>
-                      </div>
-                    </a>
-                  </article>
-                ))}
-              </div>
+            <div className="section-heading">
+              <h2 id="value-heading">Why choose AO?</h2>
+            </div>
+            <ul className="value-grid">
+              {pillars.map(({ title, copy }) => <li key={title}><h3>{title}</h3><p>{copy}</p></li>)}
+            </ul>
+            <div className="documents-strip">
+              <h3 id="documents-heading">Company documentation</h3>
+              <dl className="documents-list" aria-labelledby="documents-heading">
+                <div><dt>CIPC</dt><dd>Registration details pending</dd></div>
+                <div><dt>SARS</dt><dd>Tax status details pending</dd></div>
+                <div><dt>CSD</dt><dd>Supplier details pending</dd></div>
+              </dl>
+            </div>
+          </div>
+        </section>
+
+        <section id="service-details" className="service-details section-pad" aria-labelledby="service-details-heading" tabIndex={-1}>
+          <div className="shell">
+            <div className="section-heading"><h2 id="service-details-heading">What we supply</h2></div>
+            <div className="service-detail-list">
+              {services.map((service) => (
+                <article className="service-detail" id={`service-${service.id}`} key={service.id} tabIndex={-1}>
+                  <h3>{service.name}</h3>
+                  <div>
+                    <p>{service.detail}</p>
+                    <ul>{service.offerings.map((offering) => <li key={offering}>{offering}</li>)}</ul>
+                    <a className="text-link" href="#rfq" data-service={service.id}>Request a Quote <ArrowUpRight size={14} aria-hidden="true" /></a>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
 
         <section id="about" className="approach-section section-pad" aria-labelledby="about-heading" tabIndex={-1}>
-          <div className="shell approach-inner">
-            <div className="section-heading">
-              <p className="eyebrow with-rule">About AO</p>
-              <h2 id="about-heading">Procurement should feel straightforward.</h2>
+          <div className="shell">
+            <div className="approach-inner">
+              <div className="section-heading">
+                <h2 id="about-heading">About AO Enterprises</h2>
+              </div>
+              <div>
+                <p className="section-summary">AO Enterprises (Pty) Ltd is based in Pretoria. We bring commercial procurement, bulk supply and fulfilment together for South African organisations, with a focus on efficient ordering and long-term partnerships.</p>
+                <a href="#process" className="text-link">See how we work <ArrowDown size={15} aria-hidden="true" /></a>
+              </div>
             </div>
-            <div>
-              <p className="section-summary">Based in Pretoria, AO Enterprises helps organisations source stationery, arrange commercial printing and plan recurring orders. We start with your specifications, quantities and purchasing cycle, then quote for what you need.</p>
-              <a href="#process" className="text-link">See how we work <ArrowDown size={15} aria-hidden="true" /></a>
+            <div className="statements">
+              <div><h3>Vision</h3><p>Statement to be provided.</p></div>
+              <div><h3>Mission</h3><p>Statement to be provided.</p></div>
+            </div>
+            <div className="board" aria-labelledby="board-heading">
+              <h3 id="board-heading">Board of Directors</h3>
+              <ul className="board-grid">
+                {directors.map(({ name, title }) => (
+                  <li key={name}>
+                    <div className="director-portrait" role="img" aria-label={`Headshot for ${name} pending`}>
+                      <UserRound size={28} strokeWidth={0.9} aria-hidden="true" />
+                    </div>
+                    <div>
+                      <h4>{name}</h4>
+                      <p>{title}</p>
+                      <p className="director-bio">Biography to be provided.</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </section>
 
-        <GlassFeature />
-
         <section id="process" className="process-section section-pad" aria-labelledby="process-heading" tabIndex={-1}>
           <div className="shell">
             <div className="section-heading process-intro">
-              <div>
-                <p className="eyebrow with-rule">Our process</p>
-                <h2 id="process-heading">From enquiry<br />to fulfilment.</h2>
-              </div>
+              <div><h2 id="process-heading">From enquiry to fulfilment</h2></div>
               <p className="section-summary">It starts with a brief. We work through the details with you before you confirm an order.</p>
             </div>
             <ol className="process-grid" data-reveal>
@@ -127,60 +154,11 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="documents-section" aria-labelledby="documents-heading">
-          <div className="shell documents-inner">
-            <div>
-              <p className="eyebrow with-rule">For procurement teams</p>
-              <h2 id="documents-heading">Company documentation</h2>
-            </div>
-            <dl className="documents-list">
-              <div><dt>CIPC</dt><dd>Registration details pending</dd></div>
-              <div><dt>SARS</dt><dd>Details pending verification</dd></div>
-              <div><dt>CSD</dt><dd>Supplier details pending</dd></div>
-            </dl>
-          </div>
-        </section>
+        <GlassFeature />
 
-        <section id="contact" className="contact-section section-pad" aria-labelledby="contact-heading" tabIndex={-1}>
-          <div className="shell contact-inner">
-            <div className="section-heading">
-              <p className="eyebrow with-rule">Contact</p>
-              <h2 id="contact-heading">Tell us what you<br /> need to source.</h2>
-              <p className="section-summary">Share your quantities, print specifications or recurring supply needs to prepare a quote request.</p>
-              <a href="#rfq" className="text-link">Go to quote form <ArrowDown size={15} aria-hidden="true" /></a>
-              <p className="contact-location"><MapPin size={16} aria-hidden="true" /> Pretoria, Gauteng, South Africa</p>
-            </div>
-            <div id="rfq" className="contact-form" tabIndex={-1}><QuoteForm /></div>
-          </div>
-        </section>
+        <ContactSection />
       </main>
-
-      <footer className="site-footer">
-        <div className="shell">
-          <div className="footer-main">
-            <a href="#top" className="footer-brand" aria-label="Back to home">
-              <Image src="/assets/brand/ao-horizontal-dark.png" width={1150} height={250} alt="AO Enterprises" />
-            </a>
-            <div>
-              <h2 className="eyebrow">Services</h2>
-              <ul>{services.map((service) => <li key={service.id}><a href="#rfq" data-service={service.id}>{service.name}</a></li>)}</ul>
-            </div>
-            <nav aria-label="Footer navigation">
-              <h2 className="eyebrow">Explore</h2>
-              <ul>{footerNav.map(([label, href]) => <li key={href}><a href={href}>{label}</a></li>)}</ul>
-            </nav>
-            <div>
-              <h2 className="eyebrow">Office</h2>
-              <address>Pretoria, Gauteng<br />South Africa</address>
-              <p>Email and phone to be confirmed.</p>
-            </div>
-          </div>
-          <div className="footer-base">
-            <p>© {new Date().getUTCFullYear()} AO Enterprises (Pty) Ltd</p>
-            <a href="#top" className="text-link">Back to top <ArrowUpRight size={15} aria-hidden="true" /></a>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
       <ServiceLinks />
       <SectionMotion />
     </>

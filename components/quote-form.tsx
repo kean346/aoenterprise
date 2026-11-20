@@ -12,7 +12,8 @@ type FieldName = "company" | "name" | "email" | "phone" | "service" | "area" | "
 type FieldErrors = Partial<Record<FieldName, string>>;
 type Draft = { label: string; value: string }[];
 
-export function QuoteForm() {
+export function QuoteForm({ standalone = false }: { standalone?: boolean }) {
+  const Heading = standalone ? "h2" : "h3";
   const [errors, setErrors] = useState<FieldErrors>({});
   const [draft, setDraft] = useState<Draft | null>(null);
   const confirmation = useRef<HTMLDivElement>(null);
@@ -92,7 +93,7 @@ export function QuoteForm() {
 
   return (
     <form className="quote-form" method="dialog" aria-describedby="demo-note" onSubmit={reviewQuote} onChange={updateField} noValidate>
-      <h3>Request a Quote</h3>
+      <Heading>Request a Quote</Heading>
       <p className="form-note" id="demo-note">Preview only. Your details and attachments stay in this browser session.</p>
       <div className="form-fields">
         {label("company", "Company name", <input {...fieldProps("company")} autoComplete="organization" required maxLength={160} />)}
@@ -108,13 +109,13 @@ export function QuoteForm() {
         </div>)}
         {label("area", "Delivery area", <input {...fieldProps("area")} autoComplete="address-level2" maxLength={120} />)}
         {label("requirements", "What do you need?", <textarea {...fieldProps("requirements")} placeholder="Include quantities, specifications or dates where available." rows={4} required maxLength={3000} />, true)}
-        {label("file", "Supporting file", <div className="upload-wrap">
+        {label("file", "Spec sheet or RFQ document", <div className="upload-wrap">
           <Paperclip size={18} aria-hidden="true" />
           <input {...fieldProps("file")} type="file" accept=".pdf,.xlsx,.xls,.jpeg,.jpg,.png" />
           <p id="file-help">PDF, Excel, JPG or PNG · up to 10 MB</p>
         </div>, true)}
       </div>
-      <button className="button button-light" type="submit">Review quote request</button>
+      <button className="button button-dark" type="submit">Review quote request</button>
       {draft && (
         <div ref={confirmation} className="quote-confirmation" tabIndex={-1} role="status">
           <Check size={18} aria-hidden="true" />

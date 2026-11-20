@@ -1,8 +1,6 @@
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import "@fontsource-variable/dm-sans";
-import "@fontsource/instrument-serif/latin-400.css";
-import "@fontsource/instrument-serif/latin-400-italic.css";
 import "./globals.css";
 import "./facet.css";
 

@@ -16,7 +16,7 @@ function smoothstep(value: number) {
 
 function curlAt(u: number, release: number) {
   const turn = smoothstep((u - pivot) / (1 - pivot));
-  return -.89 * turn * (1 - .78 * release);
+  return -.76 * turn * (1 - .64 * release);
 }
 
 export async function createPaperScene(canvas: HTMLCanvasElement, source: string, onError: () => void, lowPower: boolean) {
@@ -70,17 +70,17 @@ export async function createPaperScene(canvas: HTMLCanvasElement, source: string
         const i = row * slices + column;
         const u = column / columns;
         const section = smoothstep((u - pivot) / (1 - pivot));
-        const warp = section * release * .065;
+        const warp = section * release * .039;
         const x = base[i * 3];
         const y = base[i * 3 + 1];
         positions.setXYZ(i, x + horizontal[column] - .032 * release - y * warp,
-          y + vertical[column] * .34 - .075 * release + .015 * Math.sin(phase) * (1 - u),
+          y + vertical[column] * .24 - .038 * release + .012 * Math.sin(phase) * (1 - u),
           .06 * section * release);
       }
     }
     positions.needsUpdate = true;
-    sheet.position.y = .017 * Math.sin(phase);
-    sheet.rotation.z = .015 * Math.sin(phase);
+    sheet.position.y = .012 * Math.sin(phase);
+    sheet.rotation.z = .008 * Math.sin(phase);
     renderer.render(scene, camera);
     return release;
   }
@@ -89,7 +89,7 @@ export async function createPaperScene(canvas: HTMLCanvasElement, source: string
     draw,
     resize(width: number, height: number) {
       const ratio = width / Math.max(height, 1);
-      const halfWidth = Math.max(1, imageHeight * ratio / 2) / .91;
+      const halfWidth = Math.max(1, imageHeight * ratio / 2) / .96;
       camera.left = -halfWidth;
       camera.right = halfWidth;
       camera.top = halfWidth / ratio;
