@@ -8,7 +8,7 @@ export function SiteFooter({ standalone = false }: { standalone?: boolean }) {
       <div className="shell">
         <div className="footer-main">
           <a href={standalone ? "/" : "#top"} className="footer-brand" aria-label="AO Enterprises home">
-            <Image src="/assets/brand/ao-horizontal-light.png" width={1150} height={250} alt="AO Enterprises" />
+            <Image src="/assets/brand/ao-horizontal-dark.png" width={1150} height={250} alt="AO Enterprises" />
           </a>
           <div>
             <h2 className="eyebrow">Services</h2>

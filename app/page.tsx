@@ -1,14 +1,12 @@
-import Image from "next/image";
 import { ArrowDown, ArrowUpRight, UserRound } from "lucide-react";
 import { ContactSection } from "../components/contact-section";
-import { GlassFeature } from "../components/glass-feature";
-import { PaperHero } from "../components/paper-hero";
-import { ScrollFilm } from "../components/scroll-film";
 import { SectionMotion } from "../components/section-motion";
 import { ServiceLinks } from "../components/service-links";
 import { SiteFooter } from "../components/site-footer";
 import { SiteHeader } from "../components/site-header";
 import { services } from "../components/services";
+import { TideStory } from "../components/tide-story";
+import { productArt, quadrant } from "../components/tide-assets";
 
 const pillars = [
   { title: "Bulk and contract pricing", copy: "Pricing based on order volumes and recurring supply needs." },
@@ -34,13 +32,9 @@ export default function Home() {
   return (
     <>
       <a className="skip-link" href="#main-content">Skip to content</a>
+      <SiteHeader home />
       <main id="main-content" tabIndex={-1}>
-        <section id="top" className="hero" aria-labelledby="hero-heading">
-          <SiteHeader />
-          <PaperHero />
-        </section>
-
-        <ScrollFilm />
+        <TideStory />
 
         <section id="services" className="services-section section-pad" aria-labelledby="services-heading" tabIndex={-1}>
           <div className="services-panel">
@@ -52,16 +46,23 @@ export default function Home() {
               </div>
             </div>
             <div className="service-grid">
-              {services.map((service) => (
-                <article key={service.id} className="service-card">
-                  <Image className="service-icon" src={`/assets/services/${service.id}-line-icon.svg`} alt="" width={72} height={72} loading="eager" />
-                  <h3><a href={`#service-${service.id}`}>{service.name}</a></h3>
-                  <p>{service.copy}</p>
-                  <a className="service-action" href="#rfq" data-service={service.id} aria-label={`Enquire about ${service.name}`}>
-                    Enquire <ArrowUpRight size={14} aria-hidden="true" />
-                  </a>
-                </article>
-              ))}
+              {services.map((service, index) => {
+                const [sheet, cell, color] = productArt[[4, 1, 2][index]];
+                return (
+                  <article key={service.id} className="service-card">
+                    <a href={`#service-${service.id}`} className="service-art" tabIndex={-1} aria-hidden="true">
+                      <span style={quadrant(sheet, cell, color)} />
+                    </a>
+                    <div className="service-card-body">
+                      <h3><a href={`#service-${service.id}`}>{service.name}</a></h3>
+                      <p>{service.copy}</p>
+                      <a className="service-action" href="#rfq" data-service={service.id} aria-label={`Enquire about ${service.name}`}>
+                        Enquire <ArrowUpRight size={14} aria-hidden="true" />
+                      </a>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -153,8 +154,6 @@ export default function Home() {
             </ol>
           </div>
         </section>
-
-        <GlassFeature />
 
         <ContactSection />
       </main>
